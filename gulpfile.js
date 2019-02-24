@@ -1,13 +1,15 @@
+const { dest, parallel, series, src, watch } = require('gulp');
 const nunjucks = require('gulp-nunjucks-render');
 const sass = require('gulp-sass');
-const resolve = require('rollup-plugin-node-resolve');
-const babel = require('rollup-plugin-babel');
+const imagemin = require('gulp-imagemin');
+const imageminMozjpeg = require('imagemin-mozjpeg');
 const del = require('delete');
 const browserSync = require('browser-sync').create();
-
-const { dest, parallel, series, src, watch } = require('gulp');
 const { rollup } = require('rollup');
 const { uglify } = require('rollup-plugin-uglify');
+const resolve = require('rollup-plugin-node-resolve');
+const babel = require('rollup-plugin-babel');
+
 
 /**
  * Nunjucks Task
@@ -65,6 +67,33 @@ const compileJs = async function() {
 }
 
 /**
+ * Images Task
+ */
+const images = (cb) => {
+  src('./src/assets/images/*')
+    .pipe(
+      imagemin(
+        [
+          imageminMozjpeg({
+            quality: 85
+          }),
+          imagemin.optipng({
+            optimizationLevel: 5
+          }),
+          imagemin.svgo({
+            plugins: [
+              { removeViewBox: true },
+              { cleanupIDs: false },
+            ]
+          })
+        ]
+      )
+    )
+    .pipe(dest('./dist/images'))
+  cb();
+};
+
+/**
  * Clean Helper Method
  * This method is used to clear the dist/ folder to ensure the contents
  * of the dist/ folder is completely purged.
@@ -90,6 +119,7 @@ const server = (cb) => {
  */
 watch(['./src/assets/scripts/**/*.js'], cb => compileJs(cb));
 watch(['./src/assets/styles/**/*.scss'], cb => compileSass(cb));
+watch(['./src/assets/images/*'], cb => images(cb));
 watch(['./src/views/**/*.html'], cb => compileViews(cb));
 
 /**
@@ -99,12 +129,12 @@ watch(['./src/views/**/*.html'], cb => compileViews(cb));
  */
 exports.views = compileViews;
 exports.server = server;
-exports.assets = parallel(compileSass, compileJs);
+exports.assets = parallel(compileSass, compileJs, images);
 
 exports.local = series(
   clean,
   compileViews,
-  parallel(compileSass, compileJs),
+  parallel(compileSass, compileJs, images),
   server,
 );
 

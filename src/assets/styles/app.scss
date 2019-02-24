@@ -1,1 +1,20 @@
+/**
+ Spotlight Static Template Project
+
+ These are the styles for the spotlight project.
+ We have left the project structure open for the time being, but strongly
+ suggest the use of a css architecture such as ITCSS.
+
+ Please note that this might change as the Spotlight project progresses and
+ we might make this an opinionated setup.
+ */
+
 @import 'bootstrap/scss/bootstrap';
+
+.logo-wrap {
+  text-align: center;
+
+  .logo {
+    width: 500px;
+  }
+}
