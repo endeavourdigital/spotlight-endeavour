@@ -1,20 +1,20 @@
 # Spotlight Gulp Tool
 
-## Getting Started
-Before getting into the development you need to ensure you have the correct dependencies installed
+## Getting Started
+
+First you need to ensure you have the correct dependencies installed
 locally.
 
 The core dependencies for Spotlight are:
 
-- Node
-- NPM
+- Node & NPM
 - Gulp
 
 If you haven't installed Gulp already then please follow the [getting started instructions](https://gulpjs.com/docs/en/getting-started/quick-start) on the Gulp website.
 
 **Please note that we are using Gulp 4 for Spotlight.**
 
-These are the commands that are currently available with this version of the Spotlight tool:
+These are the commands currently available with this version of the Spotlight tool:
 
 - `compileViews`: This command is to be used to complile the nunjucks templates to plain html.
 - `server`: This command is used to start up a simple local web server for development.
